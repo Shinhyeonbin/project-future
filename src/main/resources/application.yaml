@@ -34,7 +34,7 @@ spring:
         format_sql: true
         default_batch_fetch_size: 100
   h2.console.enabled: false
-  #mysql을 사용하기 위해 Fasle로 설정
+  
   sql.init.mode: always
 
   # thymeleaf.cache: false
