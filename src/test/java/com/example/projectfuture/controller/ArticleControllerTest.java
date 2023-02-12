@@ -71,7 +71,7 @@ class ArticleControllerTest {
         mvc.perform(get("/articles/search-hashtag"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.TEXT_HTML))
-                ..andExpect(view().name("articles/search-hashtag"))
+                .andExpect(view().name("articles/search-hashtag"))
                 .andExpect(model().attributeExists("articles"));
     }
 
