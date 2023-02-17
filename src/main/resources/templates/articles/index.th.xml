@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<thlogic>
+    <!--sel = "  " 부분이 불안할시, header의 id를 기입 #___ -->
+    <!--이 파일은 그냥 부트시 header와 footer을 정확하게 못잡았기때문에 id로 기입함 -->
+
+    <attr sel = "#main_header" th:replace = "header :: header" />
+    <attr sel = "#main_footer" th:replace = "footer :: footer" />
+
+</thlogic>
