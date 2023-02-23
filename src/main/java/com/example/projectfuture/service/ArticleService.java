@@ -2,6 +2,7 @@ package com.example.projectfuture.service;
 
 import com.example.projectfuture.domain.type.SearchType;
 import com.example.projectfuture.dto.ArticleDto;
+import com.example.projectfuture.dto.ArticleUpdateDto;
 import com.example.projectfuture.repository.ArticleCommentRepository;
 import com.example.projectfuture.repository.ArticleRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,5 +28,15 @@ public class ArticleService {
     @Transactional(readOnly = true)
     public ArticleDto searchArticles(long l) {
         return null;
+    }
+
+    public void saveArticles(ArticleDto dto) {
+
+    }
+
+    public void updateArticles(long articleId, ArticleUpdateDto dto) {
+    }
+
+    public void deleteArticle(long l) {
     }
 }
