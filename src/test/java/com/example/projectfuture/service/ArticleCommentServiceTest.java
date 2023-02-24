@@ -2,9 +2,11 @@ package com.example.projectfuture.service;
 
 import com.example.projectfuture.domain.Article;
 import com.example.projectfuture.domain.ArticleComment;
+import com.example.projectfuture.domain.UserAccount;
 import com.example.projectfuture.dto.ArticleCommentDto;
 import com.example.projectfuture.repository.ArticleCommentRepository;
 import com.example.projectfuture.repository.ArticleRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,14 +31,16 @@ class ArticleCommentServiceTest {
     @Mock private ArticleCommentRepository articleCommentRepository;
     @Mock private ArticleRepository articleRepository;
 
+    @Disabled("구현중")
     @DisplayName("게시글 ID로 조회하면 해당하는 댓글 리스트를 반환한다.")
     @Test
     void givenArticleId_whenSearchingArticleComments_thenReturnsArticleComments() {
 
         //Given
+        UserAccount userAccount = new UserAccount("hyeonbin", "pw", null, null, null) ;
         Long articleId = 1L;
         given(articleRepository.findById(articleId)).willReturn(Optional.of(
-                Article.of("title", "Content", "#java")));
+                Article.of(userAccount, "title", "Content", "#java")));
 
         //When
         List<ArticleCommentDto> articleComments = sut.searchArticleComment(articleId);

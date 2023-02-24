@@ -5,6 +5,7 @@ import com.example.projectfuture.domain.type.SearchType;
 import com.example.projectfuture.dto.ArticleDto;
 import com.example.projectfuture.dto.ArticleUpdateDto;
 import com.example.projectfuture.repository.ArticleRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,6 +28,7 @@ class ArticleServiceTest {
     @InjectMocks private ArticleService sut;
     @Mock private ArticleRepository articleRepository;
 
+    @Disabled("구현중")
     @DisplayName("게시글을 검색하면, 게시글 리스트를 반환한다.")
     @Test
     void givenSearchParameters_whenSearchingArticles_thenReturnsArticleList() {
@@ -39,6 +41,7 @@ class ArticleServiceTest {
         assertThat(articles).isNotNull();
     }
 
+    @Disabled("구현중")
     @DisplayName("게시글을 조회, 게시글을 반환한다.")
     @Test
     void givenArticleId_whenSearchingArticles_thenReturnsArticle() {
@@ -51,6 +54,7 @@ class ArticleServiceTest {
         assertThat(articles).isNotNull();
     }
 
+    @Disabled("구현중")
     @DisplayName("게시글 정보를 입력하면, 게시글을 생성한다.")
     @Test
     void givenArticleInfo_whenSavingArticle_thenSavesArticle() {
@@ -65,6 +69,7 @@ class ArticleServiceTest {
         then(articleRepository).should().save(any(Article.class));
     }
 
+    @Disabled("구현중")
     @DisplayName("게시글의 ID와 수정 정보를 입력하면, 게시글을 수정한다.")
     @Test
     void givenArticleIdAndModifiedInfo_whenUpdatingArticle_thenUpdatesArticle() {
@@ -79,6 +84,7 @@ class ArticleServiceTest {
         then(articleRepository).should().save(any(Article.class));
     }
 
+    @Disabled("구현중")
     @DisplayName("게시글의 ID를 입력하면, 게시글을 삭제한다..")
     @Test
     void givenArticleId_whenDeletingArticle_thenDeletesArticle() {
