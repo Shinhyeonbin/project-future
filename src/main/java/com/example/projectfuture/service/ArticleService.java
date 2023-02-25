@@ -2,16 +2,14 @@ package com.example.projectfuture.service;
 
 import com.example.projectfuture.domain.type.SearchType;
 import com.example.projectfuture.dto.ArticleDto;
-import com.example.projectfuture.dto.ArticleUpdateDto;
+import com.example.projectfuture.dto.ArticleWithCommentsDto;
 import com.example.projectfuture.repository.ArticleCommentRepository;
 import com.example.projectfuture.repository.ArticleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional
@@ -21,12 +19,12 @@ public class ArticleService {
     private final ArticleCommentRepository articleCommentRepository;
 
     @Transactional(readOnly = true)
-    public Page<ArticleDto> searchArticles(SearchType title, String search_keyword) {
+    public Page<ArticleDto> searchArticles(SearchType searchType, String searchkeyword, Pageable pageable) {
         return Page.empty();
     }
 
     @Transactional(readOnly = true)
-    public ArticleDto searchArticles(long l) {
+    public ArticleWithCommentsDto getArticle(Long articleId) {
         return null;
     }
 
@@ -34,9 +32,9 @@ public class ArticleService {
 
     }
 
-    public void updateArticles(long articleId, ArticleUpdateDto dto) {
+    public void updateArticles(ArticleDto articleId) {
     }
 
-    public void deleteArticle(long l) {
+    public void deleteArticle(long articleId) {
     }
 }
