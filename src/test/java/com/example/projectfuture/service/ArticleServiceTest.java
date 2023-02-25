@@ -82,8 +82,6 @@ class ArticleServiceTest {
         then(articleRepository).should().findById(articleId);
     }
 
-
-
     @DisplayName("없는 게시글을 조회하면, 예외를 던진다.")
     @Test
     void givenNoexistArticleId_whenSearchingArticles_thenThrowException() {
@@ -113,7 +111,6 @@ class ArticleServiceTest {
 
         // Then
         then(articleRepository).should().save(any(Article.class));
-
     }
 
     @DisplayName("게시글의 수정 정보를 입력하면, 게시글을 수정한다.")
