@@ -8,7 +8,6 @@ import com.example.projectfuture.dto.ArticleWithCommentsDto;
 import com.example.projectfuture.dto.UserAccountDto;
 import com.example.projectfuture.repository.ArticleRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,7 +42,8 @@ class ArticleServiceTest {
         Page<ArticleDto> articles = sut.searchArticles(null, null, pageable);
 
         //Then
-        assertThat(articles).isNotNull();
+        assertThat(articles).isEmpty();
+        then(articleRepository).should().findAll(pageable);
     }
 
     @DisplayName("검색어와 함께 게시글을 검색하면, 게시글 페이지를 반환한다.")
@@ -148,7 +148,6 @@ class ArticleServiceTest {
         then(articleRepository).should().getReferenceById(dto.id());
     }
 
-    @Disabled("구현중")
     @DisplayName("게시글의 ID를 입력하면, 게시글을 삭제한다..")
     @Test
     void givenArticleId_whenDeletingArticle_thenDeletesArticle() {
