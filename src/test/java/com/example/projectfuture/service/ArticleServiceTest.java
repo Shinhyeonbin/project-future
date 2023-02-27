@@ -53,14 +53,14 @@ class ArticleServiceTest {
         SearchType searchType = SearchType.TITLE;
         String searchKeyword = "title";
         Pageable pageable = Pageable.ofSize(20);
-        given(articleRepository.findByTitle(searchKeyword, pageable)).willReturn(Page.empty());
+        given(articleRepository.findByTitleContaining(searchKeyword, pageable)).willReturn(Page.empty());
 
         //When
         Page<ArticleDto> articles = sut.searchArticles(searchType, searchKeyword, pageable);
 
         //Then
         assertThat(articles).isEmpty();
-        then(articleRepository).should().findByTitle(searchKeyword, pageable);
+        then(articleRepository).should().findByTitleContaining(searchKeyword, pageable);
     }
 
     @DisplayName("게시글을 조회, 게시글을 반환한다.")
@@ -94,7 +94,7 @@ class ArticleServiceTest {
 
         //Then
         assertThat(throwable)
-                .isInstanceOf(EntityNotFoundException.class).hasMessage("게시글이 없습니다. - articleId" + articleId);
+                .isInstanceOf(EntityNotFoundException.class).hasMessage("게시글이 없습니다.");  //게시글의 id를 공개하지 않는 방향으로 결정
 
         then(articleRepository).should().findById(articleId);
     }
@@ -117,7 +117,6 @@ class ArticleServiceTest {
     @Test
     void givenModifiedInfo_whenUpdatingArticle_thenUpdatesArticle() {
         // Given
-        given(articleRepository.save(any(Article.class))).willReturn(null);
         Article article = createArticle();
         ArticleDto dto = createArticleDto("새 타이틀", "새 내용", "#new");
         given(articleRepository.getReferenceById(dto.id())).willReturn(article);
@@ -126,7 +125,6 @@ class ArticleServiceTest {
         sut.updateArticles(dto);
 
         //Then
-        then(articleRepository).should().save(any(Article.class));
         assertThat(article)
                 .hasFieldOrPropertyWithValue("title", dto.title())
                 .hasFieldOrPropertyWithValue("content", dto.content())
@@ -151,9 +149,7 @@ class ArticleServiceTest {
     @DisplayName("게시글의 ID를 입력하면, 게시글을 삭제한다..")
     @Test
     void givenArticleId_whenDeletingArticle_thenDeletesArticle() {
-
         // Given
-        willDoNothing().given(articleRepository).delete(any(Article.class));
         Long articleId = 1L;
         willDoNothing().given(articleRepository).deleteById(articleId);
 
