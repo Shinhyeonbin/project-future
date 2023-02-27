@@ -83,11 +83,11 @@ public class DataRestTest {
         // Given
 
         // When & Then
-        mvc.perform(get("/api/userAccounts")).andExpect(status().isNotFound());
-        mvc.perform(post("/api/userAccounts")).andExpect(status().isNotFound());
-        mvc.perform(put("/api/userAccounts")).andExpect(status().isNotFound());
-        mvc.perform(patch("/api/userAccounts")).andExpect(status().isNotFound());
-        mvc.perform(delete("/api/userAccounts")).andExpect(status().isNotFound());
-        mvc.perform(head("/api/userAccounts")).andExpect(status().isNotFound());
+        mvc.perform(get("/api/userAccount")).andExpect(status().isNotFound());
+        mvc.perform(post("/api/userAccount")).andExpect(status().isNotFound());
+        mvc.perform(put("/api/userAccount")).andExpect(status().isNotFound());
+        mvc.perform(patch("/api/userAccount")).andExpect(status().isNotFound());
+        mvc.perform(delete("/api/userAccount")).andExpect(status().isNotFound());
+        mvc.perform(head("/api/userAccount")).andExpect(status().isNotFound());
     }
 }
