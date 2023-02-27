@@ -20,7 +20,7 @@ public interface ArticleRepository extends
 
     Page<Article> findByTitleContaining(String title, Pageable pageable);   // 부분 검색을 위해 containing 사용
     Page<Article> findByContentContaining(String content, Pageable pageable);
-    Page<Article> findByUserAccount_UserIdContaing(String userId, Pageable pageable);
+    Page<Article> findByUserAccount_UserIdContaining(String userId, Pageable pageable);
     Page<Article> findByUserAccount_NicknameContaining(String nickname, Pageable pageable);
     Page<Article> findByHashtag(String hashtag, Pageable pageable);
     @Override

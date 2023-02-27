@@ -4,7 +4,6 @@ import com.example.projectfuture.domain.Article;
 import com.example.projectfuture.domain.type.SearchType;
 import com.example.projectfuture.dto.ArticleDto;
 import com.example.projectfuture.dto.ArticleWithCommentsDto;
-import com.example.projectfuture.repository.ArticleCommentRepository;
 import com.example.projectfuture.repository.ArticleRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ArticleService {
     private final ArticleRepository articleRepository;
-    private final ArticleCommentRepository articleCommentRepository;
 
     @Transactional(readOnly = true)
     public Page<ArticleDto> searchArticles(SearchType searchType, String searchkeyword, Pageable pageable) {
@@ -31,7 +29,7 @@ public class ArticleService {
         return switch(searchType){
             case TITLE -> articleRepository.findByTitleContaining(searchkeyword, pageable).map(ArticleDto::from);
             case CONTENT -> articleRepository.findByContentContaining(searchkeyword, pageable).map(ArticleDto::from);
-            case ID -> articleRepository.findByUserAccount_UserIdContaing(searchkeyword, pageable).map(ArticleDto::from);
+            case ID -> articleRepository.findByUserAccount_UserIdContaining(searchkeyword, pageable).map(ArticleDto::from);
             case NICKNAME -> articleRepository.findByUserAccount_NicknameContaining(searchkeyword, pageable).map(ArticleDto::from);
             case HASHTAG -> articleRepository.findByHashtag("#" + searchkeyword, pageable).map(ArticleDto::from);   //해쉬태그 할때 #을 붙여줌
         };
