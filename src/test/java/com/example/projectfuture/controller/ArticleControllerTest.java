@@ -89,12 +89,14 @@ class ArticleControllerTest {
         then(paginationService).should().getPaginationBarNumbers(pageable.getPageNumber(), Page.empty().getTotalPages());
     }
 
-    @DisplayName("[View] [Get] 게시글 리스트 상세페이지 - 정상호출")
+    @DisplayName("[View] [Get] 게시글 페이지 - 정상호출")
     @Test
     public void givenNothing_whenRequestingArticlesView_thenReturnsArticleView() throws Exception {
         //Given
         Long articleId = 1L;
+        long totalCount = 1L;
         given(articleService.getArticle(articleId)).willReturn(createArticleWithCommentsDto());
+        given(articleService.getArticleCount()).willReturn(totalCount);
 
         //When & Then
         mvc.perform(get("/articles/1"))
@@ -102,9 +104,11 @@ class ArticleControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("articles/detail"))
                 .andExpect(model().attributeExists("article"))
-                .andExpect(model().attributeExists("articleComments"));
+                .andExpect(model().attributeExists("articleComments"))
+                .andExpect(model().attribute("totalCount", totalCount));
 
         then(articleService).should().getArticle(articleId);
+        then(articleService).should().getArticleCount();
     }
 
 
