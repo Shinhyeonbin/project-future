@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -61,6 +62,51 @@ class ArticleServiceTest {
         //Then
         assertThat(articles).isEmpty();
         then(articleRepository).should().findByTitleContaining(searchKeyword, pageable);
+    }
+
+    @DisplayName("검색어 없이 게시글을 해시테그 검색하면, 빈 페이지를 반환한다.")
+    @Test
+    void givenNoSearchParameters_whenSearchingArticlesviaHashtag_thenReturnsEmptyPage() {
+        //Given
+        Pageable pageable = Pageable.ofSize(20);
+
+        //When
+        Page<ArticleDto> articles = sut.searchArticlesviaHashtag(null, pageable);
+
+        //Then
+        assertThat(articles).isEqualTo(Page.empty(pageable));
+        then(articleRepository).shouldHaveNoInteractions();
+    }
+
+    @DisplayName("게시글을 해시테그 검색하면, 게시글 페이지를 반환한다.")
+    @Test
+    void givenHashtag_whenSearchingArticlesviaHashtag_thenReturnsArticlesPage() {
+        //Given
+        String hashtag = "#java";
+        Pageable pageable = Pageable.ofSize(20);
+        given(articleRepository.findByHashtag(hashtag, pageable)).willReturn(Page.empty(pageable));
+
+        //When
+        Page<ArticleDto> articles = sut.searchArticlesviaHashtag(hashtag, pageable);
+
+        //Then
+        assertThat(articles).isEqualTo(Page.empty(pageable));
+        then(articleRepository).should().findByHashtag(hashtag, pageable);
+    }
+
+    @DisplayName("해시테그를 조회하면, 유니크 해시태그 리스트를 반환한다.")
+    @Test
+    void givenNothing_whenCalling_thenReturnsHashtaglist() {
+        //Given
+        List<String> expectedHashtag = List.of("#java", "#spring", "#boot");
+        given(articleRepository.findAllDistinctHashtag()).willReturn(expectedHashtag);
+
+        //When
+        List<String> actualHashtag = sut.getHashtags();
+
+        //Then
+        assertThat(actualHashtag).isEqualTo(expectedHashtag);
+        then(articleRepository).should().findAllDistinctHashtag();
     }
 
     @DisplayName("게시글을 조회, 게시글을 반환한다.")
