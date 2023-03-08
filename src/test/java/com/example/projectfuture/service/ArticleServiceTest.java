@@ -2,11 +2,12 @@ package com.example.projectfuture.service;
 
 import com.example.projectfuture.domain.Article;
 import com.example.projectfuture.domain.UserAccount;
-import com.example.projectfuture.domain.type.SearchType;
+import com.example.projectfuture.domain.constant.SearchType;
 import com.example.projectfuture.dto.ArticleDto;
 import com.example.projectfuture.dto.ArticleWithCommentsDto;
 import com.example.projectfuture.dto.UserAccountDto;
 import com.example.projectfuture.repository.ArticleRepository;
+import com.example.projectfuture.repository.UserAccountRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,7 @@ import static org.mockito.BDDMockito.*;
 class ArticleServiceTest {
     @InjectMocks private ArticleService sut;
     @Mock private ArticleRepository articleRepository;
+    @Mock private UserAccountRepository userAccountRepository;
 
     @DisplayName("검색글 없이 게시글을 검색하면, 게시글 페이지를 반환한다.")
     @Test
@@ -45,6 +47,42 @@ class ArticleServiceTest {
         //Then
         assertThat(articles).isEmpty();
         then(articleRepository).should().findAll(pageable);
+    }
+
+    @DisplayName("게시글 ID로 조회하면, 댓글 달긴 게시글을 반환한다.")
+    @Test
+    void givenArticleId_whenSearchingArticleWithComments_thenReturnsArticleWithComments() {
+        // Given
+        Long articleId = 1L;
+        Article article = createArticle();
+        given(articleRepository.findById(articleId)).willReturn(Optional.of(article));
+
+        // When
+        ArticleWithCommentsDto dto = sut.getArticleWithComments(articleId);
+
+        // Then
+        assertThat(dto)
+                .hasFieldOrPropertyWithValue("title", article.getTitle())
+                .hasFieldOrPropertyWithValue("content", article.getContent())
+                .hasFieldOrPropertyWithValue("hashtag", article.getHashtag());
+        then(articleRepository).should().findById(articleId);
+    }
+
+    @DisplayName("댓글 달린 게시글이 없으면, 예외를 던진다.")
+    @Test
+    void givenNonexistentArticleId_whenSearchingArticleWithComments_thenThrowsException() {
+        // Given
+        Long articleId = 0L;
+        given(articleRepository.findById(articleId)).willReturn(Optional.empty());
+
+        // When
+        Throwable t = catchThrowable(() -> sut.getArticleWithComments(articleId));
+
+        // Then
+        assertThat(t)
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("게시글이 없습니다.");
+        then(articleRepository).should().findById(articleId);
     }
 
     @DisplayName("검색어와 함께 게시글을 검색하면, 게시글 페이지를 반환한다.")
@@ -118,7 +156,7 @@ class ArticleServiceTest {
         given(articleRepository.findById(articleId)).willReturn(Optional.of(article));
 
         //When
-        ArticleWithCommentsDto dto = sut.getArticle(articleId);
+        ArticleWithCommentsDto dto = sut.getArticleWithComments(articleId);
 
         //Then
         assertThat(dto)
@@ -136,7 +174,7 @@ class ArticleServiceTest {
         given(articleRepository.findById(articleId)).willReturn(Optional.empty());
 
         //When
-        Throwable throwable = catchThrowable(() -> sut.getArticle(articleId));
+        Throwable throwable = catchThrowable(() -> sut.getArticleWithComments(articleId));
 
         //Then
         assertThat(throwable)
@@ -168,7 +206,7 @@ class ArticleServiceTest {
         given(articleRepository.getReferenceById(dto.id())).willReturn(article);
 
         //When
-        sut.updateArticles(dto);
+        sut.updateArticles(dto.id(), dto);
 
         //Then
         assertThat(article)
@@ -186,7 +224,7 @@ class ArticleServiceTest {
         given(articleRepository.getReferenceById(dto.id())).willThrow(EntityNotFoundException.class);
 
         //When
-        sut.updateArticles(dto);
+        sut.updateArticles(dto.id(), dto);
 
         //Then
         then(articleRepository).should().getReferenceById(dto.id());
