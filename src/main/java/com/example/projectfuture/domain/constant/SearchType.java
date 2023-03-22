@@ -1,4 +1,4 @@
-package com.example.projectfuture.domain.type;
+package com.example.projectfuture.domain.constant;
 
 import lombok.Getter;
 

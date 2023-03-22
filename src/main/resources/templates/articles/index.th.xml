@@ -7,6 +7,7 @@
     <attr sel = "#main_footer" th:replace = "footer :: footer" />
 
     <attr sel="main" th:object="${articles}">
+        <attr sel="#search-form" th:action="@{/articles}" th:method="get" />
         <attr sel="#search-type" th:remove="all-but-first">
             <attr sel="option[0]"
                   th:each="searchType : ${searchTypes}"
@@ -46,6 +47,7 @@
                 )}"/>
             </attr>
         </attr>
+
         <attr sel="tbody" th:remove="all-but-first">
             <attr sel="tr[0]" th:each="article : ${articles}">
                 <attr sel="td.title/a" th:text="${article.title}" th:href="@{'/articles/' + ${article.id}}" />
@@ -54,6 +56,9 @@
                 <attr sel="td.created-at/time" th:datetime="${article.createdAt}" th:text="${#temporals.format(article.createdAt, 'yyyy-MM-dd')}" />
             </attr>
         </attr>
+
+        <attr sel="#write-article" th:href="@{/articles/form}" />
+
         <attr sel="#pagination">
             <attr sel="li[0]/a"
                   th:text="'previous'"
